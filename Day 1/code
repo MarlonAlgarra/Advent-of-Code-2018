@@ -1,0 +1,28 @@
+%% Advent of Code
+%% --- Day 1: Chronal Calibration ---
+%% Problem 1
+
+load('input.txt');
+input=input';
+frecuency=0;
+for i=1:1:length(input)
+    frecuency=frecuency+input(1,i);
+end
+disp(frecuency);
+%% Problem 2
+%%
+fcheck1=[];
+while true
+    if ~(length(fcheck)==length(unique(fcheck)))
+        [vu,iu]=unique(fcheck);
+        ir=setdiff(1:length(fcheck),iu);
+        vr=fcheck(1,ir);
+        break
+    end
+    for i=1:1:length(input)
+        frequency=frequency+input(1,i);
+        fcheck1(1,i)=frequency;
+    end
+    fcheck=horzcat(fcheck,fcheck1);
+end
+disp(min(vr))
