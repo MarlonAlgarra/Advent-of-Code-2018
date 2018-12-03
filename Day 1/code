@@ -4,11 +4,12 @@
 
 load('input.txt');
 input=input';
-frecuency=0;
+frequency=0;
+fcheck=[];
 for i=1:1:length(input)
-    frecuency=frecuency+input(1,i);
+    frequency=frequency+input(1,i);
 end
-disp(frecuency);
+disp(frequency);
 %% Problem 2
 %%
 fcheck1=[];
