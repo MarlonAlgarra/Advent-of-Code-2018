@@ -1,0 +1,56 @@
+%% Advent of Code
+%% --- Day 2: Inventory Management System ---
+%% Problem 1
+
+input=string(importdata('input2.txt'))';
+abc='abcdefghijklmnopqrstuvwxyz';
+CM=zeros(2,250);
+for i=1:1:length(input)
+    for j=1:1:length(abc)
+        ic=count(input(1,i),abc(j));
+        if ic==2
+            CM(1,i)=ic;
+        elseif ic==3
+            CM(2,i)=ic;
+        end
+    end
+end
+sum2=sum(CM(1,:))/2;
+sum3=sum(CM(2,:))/3;
+result=sum2*sum3;
+disp(result)
+%% Problem 2
+
+for i1=1:1:length(input)
+    for j1=1:1:length(input)
+        br=0;
+        for c=1:1:26
+            comp1=char(input(1,i1));
+            comp2=char(input(1,j1));
+            if comp1(c)~=comp2(c) && i1~=j1
+                br=br+1;
+            end
+            if br>1
+                break
+            end
+        end
+        if br==1
+            le=c;
+            exp1=i1;
+            exp2=j1;
+            break
+        end 
+    end
+    if br==1
+        break
+    end
+end
+s1=char(input(1,exp1));
+s2=char(input(1,exp2));
+result2="";
+for jf=1:1:26
+    if s1(jf)==s2(jf)
+        result2=strcat(result2,s1(jf));
+    end
+end
+disp(result2)
