@@ -1,0 +1,79 @@
+%% Advent of Code
+%% --- Day 4: Repose Record ---
+%% Problem 1
+
+input=string(importdata('input4.txt'));
+input=erase(input,']');input=erase(input,'[');input=erase(input,'-');
+input=erase(input,'falls ');input=erase(input,'Guard ');
+input=erase(input,' begins shift');
+input=erase(input,' up'); input=erase(input,'#');
+input=strrep(input,' 00:','00'); input=strrep(input,' 23:','23'); input0=char(input);
+dt1=datetime(str2num(input0(:,1:4)),str2num(input0(:,5:6)),str2num(input0(:,7:8)),str2num(input0(:,9:10)),str2num(input0(:,11:12)),00);
+[sdt in]=sort(dt1); inputs=string(input0(:,14:end)); si=[""];
+for i=1:1:length(input')
+    si(i,1)=input0(in(i),:);
+end
+si1=char(si); C={sdt,string(si1(:,14:end))}; T=table(sdt,si1(:,14:end));
+guards=unique(C{1,2}); guards=guards(1:23,1);
+tre=minutes(zeros(length(guards),1)); pm=zeros(length(guards),1);
+sleep={str2num(char(guards)),tre,pm};
+for j=1:1:length(input')
+    if  isempty(str2num(char(C{1,2}(j,1))))
+        if C{1,2}(j)=="asleep" && C{1,2}(j-1)~="wakes "
+            inx=find(sleep{1,1}==str2num(char(C{1,2}(j-1,1))));
+            sleep{1,2}(inx,1)=sleep{1,2}(inx,1)+diff([sdt(j) sdt(j+1)]);
+            if j<1042 && C{1,2}(j+2,1)=="asleep"
+            sleep{1,2}(inx,1)=sleep{1,2}(inx,1)+diff([sdt(j+2) sdt(j+3)]);     
+            end
+            continue
+        end
+    end
+end
+p=[];
+h=guards(find(sleep{1,2}==max(sleep{1,2})));
+inmax=find(C{1,2}==h);
+for k=1:1:length(inmax)
+    if C{1,2}(inmax(k)+1)=="asleep"
+        if str2num(input0(in(inmax(k)+1),9:10))==0
+            p=horzcat(p,str2num(input0(in(inmax(k)+1),11:12)):str2num(input0(in(inmax(k)+2),11:12)));
+        else
+            p=horzcat(p,60-str2num(input0(in(inmax(k)+1),11:12)):str2num(input0(in(inmax(k)+2),11:12)));
+        end
+    end
+   if C{1,2}(inmax(k)+3)=="asleep"
+            if str2num(input0(in(inmax(k)+3),9:10))==0
+                p=horzcat(p,str2num(input0(in(inmax(k)+3),11:12)):str2num(input0(in(inmax(k)+4),11:12)));
+            else
+                p=horzcat(p,60-str2num(input0(in(inmax(k)+3),11:12)):str2num(input0(in(inmax(k)+4),11:12)));
+            end            
+    end
+end
+result=mode(p)*sleep{1,1}(find(sleep{1,2}==max(sleep{1,2})));
+disp(result)
+%% Problem 2
+
+for l=1:1:length(guards)
+    inmax2=find(C{1,2}==guards(l));
+    resultsp(l,1)=str2double(char(guards(l)));
+    p1=[];
+    for j1=1:1:length(inmax2)
+        if C{1,2}(inmax2(j1)+1)=="asleep"
+            if str2num(input0(in(inmax2(j1)+1),9:10))==0
+                p1=horzcat(p1,str2num(input0(in(inmax2(j1)+1),11:12)):str2num(input0(in(inmax2(j1)+2),11:12)));
+            else
+                p1=horzcat(p1,60-str2num(input0(in(inmax2(j1)+1),11:12)):str2num(input0(in(inmax2(j1)+2),11:12)));
+            end
+        end
+        if inmax2(j1)<length(input)-3 && C{1,2}(inmax2(j1)+3)=="asleep"
+            if str2num(input0(in(inmax2(j1)+3),9:10))==0
+                p1=horzcat(p1,str2num(input0(in(inmax2(j1)+3),11:12)):str2num(input0(in(inmax2(j1)+4),11:12)));
+            else
+                p1=horzcat(p1,60-str2num(input0(in(inmax2(j1)+3),11:12)):str2num(input0(in(inmax2(j1)+4),11:12)));
+            end
+        end
+    end
+    resultsp(l,2)=mode(p1)-1;
+    resultsp(l,3)=length(find(p1==mode(p1)));
+end
+results2=resultsp(find(resultsp(:,3)==max(resultsp(:,3))),1)*resultsp(find(resultsp(:,3)==max(resultsp(:,3))),2);
+disp(results2)
